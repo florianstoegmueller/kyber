@@ -1,6 +1,8 @@
 #include <stdio.h>
-
 #include <string>
+#include <iostream>
+
+#include "../include/base64.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,4 +32,10 @@ int main(void) {
     } else {
         printf("success\n");
     }
+
+    std::string encode = base64_encode("Test");
+    std::cout << "\nencode:\n" << encode << "\n";
+    std::string decode = base64_decode(encode);
+    std::cout << "\ndecode:\n" << decode << "\n";
+
 }

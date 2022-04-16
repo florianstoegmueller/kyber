@@ -9,7 +9,7 @@ class InputParser {
    public:
     InputParser(int argc, char *argv[]);
     bool cmdOptionExists(const std::string &option);
-    const std::string getCmdOption(const std::string &option);
+    std::string getCmdOption(const std::string &option);
 };
 
 #endif

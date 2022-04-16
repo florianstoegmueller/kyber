@@ -24,17 +24,13 @@ class Keypair {
         std::string sk_base64;
     public:
         uint8_t * encrypt();
-        void decrypt(uint8_t * ct);
+        uint8_t * decrypt(uint8_t * ct);
         void generate_pair();
-        uint8_t get_key();
+        uint8_t * get_key();
         uint8_t * get_pk();
         void set_pk(uint8_t * pk);
         uint8_t * get_sk();
         void set_sk(uint8_t * sk);
-        /*get_pk_base64();
-        set_pk_base64();
-        get_sk_base64();
-        set_sk_base64();*/
 };
 
 #endif

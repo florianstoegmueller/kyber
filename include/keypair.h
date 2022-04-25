@@ -20,8 +20,8 @@ class Keypair {
         uint8_t sk[CRYPTO_SECRETKEYBYTES];
         uint8_t ct[CRYPTO_CIPHERTEXTBYTES];
         uint8_t key[CRYPTO_BYTES];
-        std::string pk_base64;
-        std::string sk_base64;
+        bool pk_is_set = false;
+        bool sk_is_set = false;
     public:
         uint8_t * encrypt();
         uint8_t * decrypt(uint8_t * ct);

@@ -22,5 +22,5 @@ set(SOURCES
     ${SRCDIR}
 )
 
-add_executable(main ${SOURCES})
-target_compile_definitions(main PRIVATE KYBER_K=2)
+add_executable(kyber ${SOURCES})
+target_compile_definitions(kyber PRIVATE KYBER_K=2)

@@ -25,8 +25,6 @@ extern "C" {
 #define CT_FILE_DEFAULT "ct"
 #define KEY_FILE_DEFAULT "key"
 
-// TODO check retrun values of functions
-
 void generate(Keypair pair, const std::string uid) {
     pair.generate_pair();
     std::string pk = encode(pair.get_pk(), CRYPTO_PUBLICKEYBYTES);
@@ -43,16 +41,15 @@ void generate(Keypair pair, const std::string uid) {
 }
 
 void encrypt(Keypair pair, const std::string pk_file) {
-    std::string pk_encoded[2];
-    uint8_t* pk;
+    std::string uid;
+    uint8_t pk[CRYPTO_PUBLICKEYBYTES];
 
-    if (!read(pk_file, pk_encoded)) {
-        std::cout << "Error reading pk from pk file! Aborting!" << std::endl;
+    if (!parsePKFile(pk_file, pk, uid)) {
+        std::cout << "Error parsing pk file! Aborting!" << std::endl;
         return;
     }
-    decode(pk_encoded[1], pk, CRYPTO_PUBLICKEYBYTES);
-    pair.set_pk(pk);
 
+    pair.set_pk(pk);
     uint8_t* ct = pair.encrypt();
     uint8_t* key = pair.get_key();
     std::string ct_encoded = encode(ct, CRYPTO_CIPHERTEXTBYTES);
@@ -66,21 +63,19 @@ void encrypt(Keypair pair, const std::string pk_file) {
 
 void decrypt(Keypair pair, const std::string sk_file,
              const std::string ct_file) {
-    std::string sk_encoded[2], ct_encoded[2], key_encoded;
+    std::string uid, key_encoded;
     uint8_t* key;
     uint8_t sk[CRYPTO_SECRETKEYBYTES];
     uint8_t ct[CRYPTO_CIPHERTEXTBYTES];
-    if (!read(sk_file, sk_encoded)) {
-        std::cout << "Error reading sk from sk file! Aborting!" << std::endl;
-        return;
-    }
-    if (!read(ct_file, ct_encoded)) {
-        std::cout << "Error reading ct from ct file! Aborting!" << std::endl;
-        return;
-    }
 
-    decode(sk_encoded[1], sk, CRYPTO_SECRETKEYBYTES);
-    decode(ct_encoded[0], ct, CRYPTO_CIPHERTEXTBYTES);
+    if (!parseSKFile(sk_file, sk, uid)) {
+        std::cout << "Error parsing sk file! Aborting!" << std::endl;
+        return;
+    }
+    if (!parseCTFile(ct_file, ct)) {
+        std::cout << "Error parsing ct file! Aborting!" << std::endl;
+        return;
+    }
 
     pair.set_sk(sk);
     key = pair.decrypt(ct);

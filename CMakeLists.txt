@@ -4,9 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 cmake_minimum_required(VERSION 3.1.0)
 
-AUX_SOURCE_DIRECTORY(src SRCDIR) 
-
-set(SOURCES
+set(COMMONSOURCES
     kyber/ref/kex.c
     kyber/ref/kem.c
     kyber/ref/indcpa.c
@@ -16,11 +14,32 @@ set(SOURCES
     kyber/ref/cbd.c
     kyber/ref/reduce.c
     kyber/ref/verify.c
-    kyber/ref/randombytes.c
     kyber/ref/fips202.c
     kyber/ref/symmetric-shake.c
-    ${SRCDIR}
+    src/base64.cpp
+    src/helpers.cpp
+    src/inputparser.cpp
+    src/keypair.cpp
+    src/kyber.cpp
+)
+
+set(SOURCES
+    kyber/ref/randombytes.c
+    src/main.cpp
+    ${COMMONSOURCES}
+)
+
+set(TESTSOURCES
+    kyber/ref/rng.c
+    src/test_kyber.cpp
+    ${COMMONSOURCES}
 )
 
 add_executable(kyber ${SOURCES})
+add_executable(test_kyber ${TESTSOURCES})
+
 target_compile_definitions(kyber PRIVATE KYBER_K=2)
+target_compile_definitions(test_kyber PRIVATE KYBER_K=2)
+
+find_package(OpenSSL REQUIRED)
+target_link_libraries(test_kyber OpenSSL::Crypto)

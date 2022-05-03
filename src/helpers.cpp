@@ -92,3 +92,12 @@ int parseCTFile(const std::string ct_file, uint8_t ct_out[]) {
     if (!decode(buf[0], ct_out, CRYPTO_CIPHERTEXTBYTES)) return 0;
     return 1;
 }
+
+int parseKeyFile(const std::string key_file, uint8_t key_out[]) {
+    if (key_file.empty() || !key_out) return 0;
+
+    std::string buf[2];
+    if (!read(key_file, buf)) return 0;
+    if (!decode(buf[0], key_out, CRYPTO_BYTES)) return 0;
+    return 1;
+}

@@ -1,6 +1,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "../include/base64.h"
+#include "../include/helpers.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,9 +13,6 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#include "../include/base64.h"
-#include "../include/helpers.h"
 
 std::string encode(const uint8_t in[], const int size) {
     std::string out("");

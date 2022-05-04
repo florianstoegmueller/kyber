@@ -19,11 +19,13 @@ extern "C" {
 }
 #endif
 
-enum FileType { pk, sk, ct, ss };
+#define SEED_BYTES 48
 
 #define NOT_EQUAL 0
 #define EQUAL 1
 #define ERROR 2
+
+enum FileType { pk, sk, ct, ss };
 
 std::string getValue(std::ifstream* file, const std::string marker) {
     std::string line;
@@ -34,7 +36,8 @@ std::string getValue(std::ifstream* file, const std::string marker) {
     return "";
 }
 
-void readHex(const std::string in, unsigned char* out, int len) {
+// Converts a hex string into a byte array.
+void readHex(const std::string in, unsigned char* out, const int len) {
     memset(out, 0x00, len);
 
     for (int i = 0; i < in.length(); i++) {
@@ -54,8 +57,8 @@ void readHex(const std::string in, unsigned char* out, int len) {
     }
 }
 
-int test(std::ifstream* file, const std::string marker, FileType type,
-         int buf_size) {
+int test(std::ifstream* file, const std::string marker, const FileType type,
+         const int buf_size) {
     std::string value = getValue(file, marker);
     if (value.empty()) return ERROR;
 
@@ -88,8 +91,6 @@ int test(std::ifstream* file, const std::string marker, FileType type,
 
 int main(int argc, char* argv[]) {
     InputParser input(argc, argv);
-    Keypair pair;
-    Kyber kyber;
 
     const std::string kat_arg = input.getCmdOption("-kat");
     if (kat_arg.empty()) return -1;
@@ -98,26 +99,36 @@ int main(int argc, char* argv[]) {
     if (!kat_file.is_open()) return -1;
 
     while (!getValue(&kat_file, "count = ").empty()) {
-        std::string line = getValue(&kat_file, "seed = ");
-        int len = (line.length() / 2);
-        unsigned char seed[len];
-        readHex(line, seed, len);
+        // retrive the seed from the kat file and use it for initialization
+        std::string value = getValue(&kat_file, "seed = ");
+        if (value.empty()) {
+            std::cout << "error: couldn't retrive seed" << std::endl;
+            continue;
+        }
 
-        std::cout << "testing with seed " << line << std::endl;
-
+        unsigned char seed[SEED_BYTES];
+        readHex(value, seed, SEED_BYTES);
         randombytes_init(seed, NULL, 256);
+
+        std::cout << "testing with seed " << value << std::endl;
+
+        // generate the four kyber files
+        Keypair pair;
+        Kyber kyber;
         kyber.generate(&pair, "test");
         kyber.encrypt(&pair, PK_FILE_DEFAULT);
         kyber.decrypt(&pair, SK_FILE_DEFAULT, CT_FILE_DEFAULT);
 
+        // compare the generated kyber files with the kat file
         if (!test(&kat_file, "pk = ", FileType(pk), CRYPTO_PUBLICKEYBYTES) ||
             !test(&kat_file, "sk = ", FileType(sk), CRYPTO_SECRETKEYBYTES) ||
             !test(&kat_file, "ct = ", FileType(ct), CRYPTO_CIPHERTEXTBYTES) ||
             !test(&kat_file, "ss = ", FileType(ss), CRYPTO_BYTES)) {
-            std::cout << "error: test was not successful" << std::endl;
+            std::cout << "error: test was not successful" << std::endl
+                      << std::endl;
+        } else {
+            std::cout << "success" << std::endl << std::endl;
         }
-
-        std::cout << "success" << std::endl << std::endl;
     }
 
     kat_file.close();

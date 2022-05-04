@@ -37,13 +37,14 @@ int main(int argc, char* argv[]) {
     const std::string sk_file = input.getCmdOption("-sk");
     const std::string ct_file = input.getCmdOption("-ct");
 
-    if (input.cmdOptionExists("-g") && !uid.empty()) kyber.generate(&pair, uid);
-
-    if (input.cmdOptionExists("-e") && !pk_file.empty())
+    if (input.cmdOptionExists("-g") && !uid.empty())
+        kyber.generate(&pair, uid);
+    else if (input.cmdOptionExists("-e") && !pk_file.empty())
         kyber.encrypt(&pair, pk_file);
-
-    if (input.cmdOptionExists("-d") && !sk_file.empty() && !ct_file.empty())
+    else if (input.cmdOptionExists("-d") && !sk_file.empty() && !ct_file.empty())
         kyber.decrypt(&pair, sk_file, ct_file);
+    else
+        std::cout << "No command line argument given. For help type: " << argv[0] << " -h" << std::endl;
 
     return 0;
 }

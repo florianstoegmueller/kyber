@@ -1,7 +1,5 @@
 #include "../include/keypair.h"
 
-// TODO null checks
-
 uint8_t* Keypair::encrypt() {
     if (pk_is_set) {
         crypto_kem_enc(ct, key, pk);
@@ -27,6 +25,7 @@ void Keypair::generate_pair() {
 uint8_t* Keypair::get_key() { return key; }
 
 uint8_t* Keypair::get_pk() { return pk; }
+
 void Keypair::set_pk(uint8_t pk_in[]) {
     if (pk_in) {
         for (int i = 0; i < CRYPTO_PUBLICKEYBYTES; i++) {
@@ -37,6 +36,7 @@ void Keypair::set_pk(uint8_t pk_in[]) {
 }
 
 uint8_t* Keypair::get_sk() { return sk; }
+
 void Keypair::set_sk(uint8_t sk_in[]) {
     if (sk_in) {
         for (int i = 0; i < CRYPTO_SECRETKEYBYTES; i++) {

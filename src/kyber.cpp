@@ -1,10 +1,9 @@
-#include "../include/kyber.h"
-
 #include <stdio.h>
 
 #include <iostream>
 #include <string>
 
+#include "../include/kyber.h"
 #include "../include/helpers.h"
 #include "../include/keypair.h"
 

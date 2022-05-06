@@ -26,13 +26,13 @@ class Keypair {
 
    public:
     uint8_t* encrypt();
-    uint8_t* decrypt(uint8_t ct[]);
+    uint8_t* decrypt(const uint8_t ct[]);
     void generate_pair();
     uint8_t* get_key();
     uint8_t* get_pk();
-    void set_pk(uint8_t pk[]);
+    void set_pk(const uint8_t pk[]);
     uint8_t* get_sk();
-    void set_sk(uint8_t sk[]);
+    void set_sk(const uint8_t sk[]);
 };
 
 #endif

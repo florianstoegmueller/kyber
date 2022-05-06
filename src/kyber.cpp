@@ -18,7 +18,7 @@ extern "C" {
 }
 #endif
 
-void Kyber::generate(Keypair* pair, const std::string uid) {
+void Kyber::generate(Keypair* const pair, const std::string uid) {
     (*pair).generate_pair();
     std::string pk = encode((*pair).get_pk(), CRYPTO_PUBLICKEYBYTES);
     std::string sk = encode((*pair).get_sk(), CRYPTO_SECRETKEYBYTES);
@@ -33,7 +33,7 @@ void Kyber::generate(Keypair* pair, const std::string uid) {
         std::cout << "Error writing sk to sk file!" << std::endl;
 }
 
-void Kyber::encrypt(Keypair* pair, const std::string pk_file) {
+void Kyber::encrypt(Keypair* const pair, const std::string pk_file) {
     std::string uid;
     uint8_t pk[CRYPTO_PUBLICKEYBYTES];
 
@@ -54,7 +54,7 @@ void Kyber::encrypt(Keypair* pair, const std::string pk_file) {
         std::cout << "Error writing key to key file!" << std::endl;
 }
 
-void Kyber::decrypt(Keypair* pair, const std::string sk_file,
+void Kyber::decrypt(Keypair* const pair, const std::string sk_file,
                     const std::string ct_file) {
     std::string uid, key_encoded;
     uint8_t* key;

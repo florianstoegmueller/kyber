@@ -12,9 +12,9 @@
 
 class Kyber {
    public:
-    void generate(Keypair* pair, const std::string uid);
-    void encrypt(Keypair* pair, const std::string pk_file);
-    void decrypt(Keypair* pair, const std::string sk_file,
+    void generate(Keypair* const pair, const std::string uid);
+    void encrypt(Keypair* const pair, const std::string pk_file);
+    void decrypt(Keypair* const pair, const std::string sk_file,
                  const std::string ct_file);
 };
 

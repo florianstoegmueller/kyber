@@ -42,4 +42,5 @@ target_compile_definitions(kyber PRIVATE KYBER_K=2)
 target_compile_definitions(test_kyber PRIVATE KYBER_K=2)
 
 find_package(OpenSSL REQUIRED)
+target_link_libraries(kyber OpenSSL::Crypto)
 target_link_libraries(test_kyber OpenSSL::Crypto)

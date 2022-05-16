@@ -280,3 +280,22 @@ std::string base64_decode(std::string_view s, bool remove_linebreaks) {
 }
 
 #endif  // __cplusplus >= 201703L
+
+//
+// Interface with secure string
+//
+std::string base64_encode(secure::string s, bool url) {
+   return encode(s, url);
+}
+
+std::string base64_encode_pem (secure::string s) {
+   return encode_pem(s);
+}
+
+std::string base64_encode_mime(secure::string s) {
+   return encode_mime(s);
+}
+
+std::string base64_decode(secure::string s, bool remove_linebreaks) {
+   return decode(s, remove_linebreaks);
+}

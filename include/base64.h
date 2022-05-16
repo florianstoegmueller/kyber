@@ -8,6 +8,8 @@
 
 #include <string>
 
+#include "securestring.h"
+
 #if __cplusplus >= 201703L
 #include <string_view>
 #endif  // __cplusplus >= 201703L
@@ -31,5 +33,14 @@ std::string base64_encode_mime(std::string_view s);
 
 std::string base64_decode(std::string_view s, bool remove_linebreaks = false);
 #endif  // __cplusplus >= 201703L
+
+//
+// Interface with secure string
+//
+std::string base64_encode     (secure::string s, bool url = false);
+std::string base64_encode_pem (secure::string s);
+std::string base64_encode_mime(secure::string s);
+
+std::string base64_decode(secure::string s, bool remove_linebreaks = false);
 
 #endif /* BASE64_H_C0CE2A47_D10E_42C9_A27C_C883944E704A */

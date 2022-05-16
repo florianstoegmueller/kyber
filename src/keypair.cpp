@@ -45,3 +45,10 @@ void Keypair::set_sk(const uint8_t sk_in[]) {
         sk_is_set = true;
     }
 }
+
+Keypair::~Keypair() {
+    memset(pk, 0x00, CRYPTO_PUBLICKEYBYTES);
+    memset(sk, 0x00, CRYPTO_SECRETKEYBYTES);
+    memset(ct, 0x00, CRYPTO_CIPHERTEXTBYTES);
+    memset(key, 0x00, CRYPTO_BYTES);
+}

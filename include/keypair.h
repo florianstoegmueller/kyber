@@ -33,6 +33,7 @@ class Keypair {
     void set_pk(const uint8_t pk[]);
     uint8_t* get_sk();
     void set_sk(const uint8_t sk[]);
+    ~Keypair();
 };
 
 #endif

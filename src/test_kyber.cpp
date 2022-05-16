@@ -19,15 +19,16 @@ extern "C" {
 }
 #endif
 
-#define SEED_BYTES 48
-
-#define NOT_EQUAL 0
-#define EQUAL 1
-#define ERROR 2
+static const unsigned int k_failure = 0;
+static const unsigned int k_success = 1;
+static const unsigned int k_error = 2;
+static const unsigned int k_seed_bytes = 48;
 
 enum FileType { pk, sk, ct, ss };
 
 std::string getValue(std::ifstream* const file, const std::string marker) {
+    if (!file) return "";
+
     std::string line;
     while (getline(*file, line)) {
         std::size_t pos = line.find(marker);
@@ -40,10 +41,10 @@ std::string getValue(std::ifstream* const file, const std::string marker) {
     Converts a hex string into a byte array.
 */
 void readHex(const std::string in, uint8_t* const out, const int len) {
+    if (!out) return;
+    
     memset(out, 0x00, len);
-
-    for (int i = 0; i < in.length(); i++) {
-        char ch = in[i];
+    for (auto ch : in) {
         if ((ch >= '0') && (ch <= '9'))
             ch = ch - '0';
         else if ((ch >= 'A') && (ch <= 'F'))
@@ -67,7 +68,7 @@ void readHex(const std::string in, uint8_t* const out, const int len) {
 int test(std::ifstream* const file, const std::string marker, const FileType type,
          const int buf_size) {
     std::string value = getValue(file, marker);
-    if (value.empty()) return ERROR;
+    if (value.empty()) return k_error;
 
     uint8_t kat_buf[buf_size];
     readHex(value, kat_buf, buf_size);
@@ -77,23 +78,23 @@ int test(std::ifstream* const file, const std::string marker, const FileType typ
 
     switch (type) {
         case pk:
-            if (!parsePKFile(PK_FILE_DEFAULT, parsed_buf, uid)) return ERROR;
+            if (!parsePKFile(k_pk_file_default, parsed_buf, uid)) return k_error;
             break;
         case sk:
-            if (!parseSKFile(SK_FILE_DEFAULT, parsed_buf, uid)) return ERROR;
+            if (!parseSKFile(k_sk_file_default, parsed_buf, uid)) return k_error;
             break;
         case ct:
-            if (!parseCTFile(CT_FILE_DEFAULT, parsed_buf)) return ERROR;
+            if (!parseCTFile(k_ct_file_default, parsed_buf)) return k_error;
             break;
         case ss:
-            if (!parseKeyFile(KEY_FILE_DEFAULT, parsed_buf)) return ERROR;
+            if (!parseKeyFile(k_key_file_default, parsed_buf)) return k_error;
             break;
         default:
-            return ERROR;
+            return k_error;
     }
 
-    if (memcmp(kat_buf, parsed_buf, buf_size)) return NOT_EQUAL;
-    return EQUAL;
+    if (memcmp(kat_buf, parsed_buf, buf_size)) return k_failure;
+    return k_success;
 }
 
 int main(int argc, char* argv[]) {
@@ -108,7 +109,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::ifstream kat_file(kat_arg);
-    if (!kat_file.is_open()) {
+    if (!kat_file) {
         std::cout << "Unable to open kat file." << std::endl;
         return -1;
     }
@@ -121,8 +122,8 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        unsigned char seed[SEED_BYTES];
-        readHex(value, seed, SEED_BYTES);
+        unsigned char seed[k_seed_bytes];
+        readHex(value, seed, k_seed_bytes);
         randombytes_init(seed, NULL, 256);
 
         std::cout << "testing with seed " << value << std::endl;
@@ -131,17 +132,17 @@ int main(int argc, char* argv[]) {
         Keypair pair;
         Kyber kyber;
         kyber.generate(&pair, "test");
-        kyber.encrypt(&pair, PK_FILE_DEFAULT);
-        kyber.decrypt(&pair, SK_FILE_DEFAULT, CT_FILE_DEFAULT);
+        kyber.encrypt(&pair, k_pk_file_default);
+        kyber.decrypt(&pair, k_sk_file_default, k_ct_file_default);
 
         // compare the generated kyber files with the kat file
         if (test(&kat_file, "pk = ", FileType(pk), CRYPTO_PUBLICKEYBYTES) !=
-                EQUAL ||
+                k_success ||
             test(&kat_file, "sk = ", FileType(sk), CRYPTO_SECRETKEYBYTES) !=
-                EQUAL ||
+                k_success ||
             test(&kat_file, "ct = ", FileType(ct), CRYPTO_CIPHERTEXTBYTES) !=
-                EQUAL ||
-            test(&kat_file, "ss = ", FileType(ss), CRYPTO_BYTES) != EQUAL) {
+                k_success ||
+            test(&kat_file, "ss = ", FileType(ss), CRYPTO_BYTES) != k_success) {
             std::cout << "error: test was not successful" << std::endl
                       << std::endl;
         } else {

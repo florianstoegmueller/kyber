@@ -5,10 +5,10 @@
 
 #include "keypair.h"
 
-#define PK_FILE_DEFAULT "pk"
-#define SK_FILE_DEFAULT "sk"
-#define CT_FILE_DEFAULT "ct"
-#define KEY_FILE_DEFAULT "key"
+static const std::string k_pk_file_default = "pk";
+static const std::string k_sk_file_default = "sk";
+static const std::string k_ct_file_default = "ct";
+static const std::string k_key_file_default = "key";
 
 class Kyber {
    public:

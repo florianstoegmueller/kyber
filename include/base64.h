@@ -37,10 +37,7 @@ std::string base64_decode(std::string_view s, bool remove_linebreaks = false);
 //
 // Interface with secure string
 //
-std::string base64_encode     (secure::string s, bool url = false);
-std::string base64_encode_pem (secure::string s);
-std::string base64_encode_mime(secure::string s);
-
-std::string base64_decode(secure::string s, bool remove_linebreaks = false);
+secure::string base64_encode     (secure::string s, bool url = false);
+secure::string base64_decode(secure::string s, bool remove_linebreaks = false);
 
 #endif /* BASE64_H_C0CE2A47_D10E_42C9_A27C_C883944E704A */

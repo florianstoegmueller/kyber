@@ -6,6 +6,7 @@
 #include "../include/inputparser.h"
 #include "../include/keypair.h"
 #include "../include/kyber.h"
+#include "../include/aes.h"
 
 void usage(const std::string name) {
     std::cout << "Usage: " << std::endl;
@@ -36,15 +37,18 @@ int main(int argc, char* argv[]) {
     const std::string pk_file = input.getCmdOption("-pk");
     const std::string sk_file = input.getCmdOption("-sk");
     const std::string ct_file = input.getCmdOption("-ct");
+    const secure::string key(input.getCmdOption("-pass"));
 
     if (input.cmdOptionExists("-g") && !uid.empty())
-        kyber.generate(&pair, uid);
+        kyber.generate(&pair, uid, key);
     else if (input.cmdOptionExists("-e") && !pk_file.empty())
         kyber.encrypt(&pair, pk_file);
-    else if (input.cmdOptionExists("-d") && !sk_file.empty() && !ct_file.empty())
-        kyber.decrypt(&pair, sk_file, ct_file);
+    else if (input.cmdOptionExists("-d") && !sk_file.empty() &&
+             !ct_file.empty())
+        kyber.decrypt(&pair, sk_file, ct_file, key);
     else
-        std::cout << "No command line argument given. For help type: " << argv[0] << " -h" << std::endl;
+        std::cout << "No command line argument given. For help type: "
+                  << argv[0] << " -h" << std::endl;
 
     return 0;
 }

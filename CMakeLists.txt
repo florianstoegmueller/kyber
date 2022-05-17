@@ -21,6 +21,7 @@ set(COMMONSOURCES
     src/inputparser.cpp
     src/keypair.cpp
     src/kyber.cpp
+    src/aes.cpp
 )
 
 set(SOURCES
@@ -38,8 +39,8 @@ set(TESTSOURCES
 add_executable(kyber ${SOURCES})
 add_executable(test_kyber ${TESTSOURCES})
 
-target_compile_definitions(kyber PRIVATE KYBER_K=2)
-target_compile_definitions(test_kyber PRIVATE KYBER_K=2)
+target_compile_definitions(kyber PRIVATE KYBER_K=4)
+target_compile_definitions(test_kyber PRIVATE KYBER_K=4)
 
 find_package(OpenSSL REQUIRED)
 target_link_libraries(kyber OpenSSL::Crypto)

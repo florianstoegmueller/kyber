@@ -284,18 +284,10 @@ std::string base64_decode(std::string_view s, bool remove_linebreaks) {
 //
 // Interface with secure string
 //
-std::string base64_encode(secure::string s, bool url) {
-   return encode(s, url);
+secure::string base64_encode(secure::string s, bool url) {
+   return secure::string(encode(s, url));
 }
 
-std::string base64_encode_pem (secure::string s) {
-   return encode_pem(s);
-}
-
-std::string base64_encode_mime(secure::string s) {
-   return encode_mime(s);
-}
-
-std::string base64_decode(secure::string s, bool remove_linebreaks) {
-   return decode(s, remove_linebreaks);
+secure::string base64_decode(secure::string s, bool remove_linebreaks) {
+   return secure::string(decode(s, remove_linebreaks));
 }

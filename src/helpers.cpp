@@ -1,8 +1,10 @@
+#include "../include/helpers.h"
+
 #include <fstream>
 #include <iostream>
 
+#include "../include/aes.h"
 #include "../include/base64.h"
-#include "../include/helpers.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,28 +17,34 @@ extern "C" {
 #endif
 
 secure::string encode(const uint8_t in[], const int size) {
-    secure::string out ("");
+    secure::string out("");
+    secure::string tmp("");
     if (in) {
         for (int i = 0; i < size; i++) {
-            out += (char)in[i];
+            tmp += (char)in[i];
         }
-        out = base64_encode(out);
+        out += base64_encode(tmp);
     }
     return out;
 }
 
 int decode(secure::string in, uint8_t out[], const int size) {
     if (out && !in.empty()) {
-        in = base64_decode(in);
+        secure::string tmp(base64_decode(in));
         for (int i = 0; i < size; i++) {
-            out[i] = in[i];
+            out[i] = tmp[i];
         }
         return 1;
     }
     return 0;
 }
 
-int write(const std::string path, const secure::string line, const bool append) {
+secure::string encode(secure::string in) { return base64_encode(in); }
+
+secure::string decode(secure::string in) { return base64_decode(in); }
+
+int write(const std::string path, const secure::string line,
+          const bool append) {
     if (path.empty()) return 0;
 
     std::ofstream file(path, append ? std::ios::app : std::ios::out);
@@ -81,6 +89,29 @@ int parseSKFile(const std::string sk_file, uint8_t sk_out[], std::string &uid) {
     if (!read(sk_file, buf)) return 0;
     if (!decode(buf[1], sk_out, CRYPTO_SECRETKEYBYTES)) return 0;
     uid = buf[0];
+    return 1;
+}
+
+int parseSKFileAES(const std::string sk_file, uint8_t sk_out[],
+                   std::string &uid, const secure::string pass) {
+    if (sk_file.empty() || !sk_out) return 0;
+
+    secure::string buf[1];
+    if (!read(sk_file, buf)) return 0;
+    secure::string decoded(decode(buf[0]));
+    if (strncmp(decoded.c_str(), k_salted.c_str(), k_salted.length()) != 0)
+        return 0;
+
+    AES aes;
+    secure::string ptext;
+    aes.decryptSalted(decoded, ptext, pass);
+
+    std::string linebreak = "\n";
+    int pos = ptext.find(linebreak);
+    uid = ptext.substr(0, pos);
+    secure::string sk(ptext.substr(pos + linebreak.length(), ptext.length()));
+    memcpy(sk_out, sk.c_str(), CRYPTO_SECRETKEYBYTES);
+
     return 1;
 }
 

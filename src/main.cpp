@@ -6,7 +6,6 @@
 #include "../include/inputparser.h"
 #include "../include/keypair.h"
 #include "../include/kyber.h"
-#include "../include/aes.h"
 
 void usage(const std::string name) {
     std::cout << "Usage: " << std::endl;

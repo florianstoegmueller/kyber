@@ -1,8 +1,6 @@
 #ifndef KYBER_H
 #define KYBER_H
 
-#include <string>
-
 #include "coder.h"
 #include "filehandler.h"
 #include "keypair.h"

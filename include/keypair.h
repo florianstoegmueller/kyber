@@ -1,16 +1,11 @@
 #ifndef KEYPAIR_H
 #define KEYPAIR_H
 
-#include <stdint.h>
-
-#include <string>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "../kyber/ref/kem.h"
-#include "../kyber/ref/params.h"
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,5 @@
 #include "../include/kyber.h"
 
-#include <stdio.h>
-
 #include <iostream>
 #include <string>
 
@@ -13,7 +11,6 @@ extern "C" {
 #endif
 
 #include "../kyber/ref/kem.h"
-#include "../kyber/ref/params.h"
 
 #ifdef __cplusplus
 }

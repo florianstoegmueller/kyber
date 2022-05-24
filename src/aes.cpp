@@ -2,8 +2,6 @@
 
 #include <openssl/rand.h>
 
-#include <string>
-
 // number of rounds for key derivation
 // set to 1 for compatibility with OpenSSL CLI
 static const unsigned int k_nrounds = 1;

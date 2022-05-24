@@ -1,5 +1,7 @@
 #include "../include/keypair.h"
 
+#include <string>
+
 uint8_t* Keypair::encrypt() {
     if (pk_is_set) {
         crypto_kem_enc(ct, key, pk);

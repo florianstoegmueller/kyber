@@ -18,7 +18,7 @@ AES::AES() {
 
 int AES::init(const secure::string key_data_in, const byte salt[k_salt_size]) {
     byte key[k_key_size], iv[k_key_size], key_data[key_data_in.length()];
-    memcpy(key_data, &key_data_in, key_data_in.length());
+    memcpy(key_data, key_data_in.c_str(), key_data_in.length());
 
     int i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha256(), salt, key_data,
                            key_data_in.length(), k_nrounds, key, iv);

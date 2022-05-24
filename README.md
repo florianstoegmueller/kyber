@@ -8,7 +8,7 @@ The application supports three modes:
 
 * Generation: This mode generates a secret-key and a public-key file.
   ```bash
-  ./kyber -g -uid <mail>
+  ./kyber -g -uid <mail> [-pass <aes-key>]
   ```
 * Encryption: Taking a public-key file as input this mode genereates a shared secret and ouputs it as a ciphertext (and also unencrypted).
   ```bash
@@ -16,12 +16,14 @@ The application supports three modes:
   ```
 * Decryption: The decryption mode needs a secret-key file and a ciphertext file to retrive the shared secret.
   ```bash
-  ./kyber -d -sk <sk-file> -ct <ct-file>
+  ./kyber -d -sk <sk-file> -ct <ct-file> [-pass <aes-key>]
   ```
+With the optional option `-pass` the secret key file can be encrypted using AES.
 
 ### Building
 
-Build this project by typing the following command (cmake is required):
+To build this project CMake and OPENSSL is requiered.
+By typing the following command the project can be built:
 ```bash
 make release
 ```

@@ -9,9 +9,9 @@
 
 void usage(const std::string name) {
     std::cout << "Usage: " << std::endl;
-    std::cout << "\t" << name << " -g -uid <email>" << std::endl;
+    std::cout << "\t" << name << " -g -uid <email> [-pass <aes-key>]" << std::endl;
     std::cout << "\t" << name << " -e -pk <pk-file>" << std::endl;
-    std::cout << "\t" << name << " -d -sk <sk-file> -ct <ct-file>" << std::endl;
+    std::cout << "\t" << name << " -d -sk <sk-file> -ct <ct-file> [-pass <aes-key>]" << std::endl;
     std::cout << std::endl << "Options:" << std::endl;
     std::cout << "\t-h, --help\t prints this help text" << std::endl;
     std::cout << "\t-g\t\t generate a key pair" << std::endl;
@@ -20,6 +20,7 @@ void usage(const std::string name) {
     std::cout << "\t-pk\t\t specify the private key file" << std::endl;
     std::cout << "\t-sk\t\t specify the secret key file" << std::endl;
     std::cout << "\t-ct\t\t specify the ciphertext file" << std::endl;
+    std::cout << "\t-pass\t\t specify the AES key for en- & decryption of the secret key file" << std::endl;
 }
 
 int main(int argc, char* argv[]) {

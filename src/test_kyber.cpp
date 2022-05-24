@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "../include/helpers.h"
+#include "../include/filehandler.h"
 #include "../include/inputparser.h"
 #include "../include/keypair.h"
 #include "../include/kyber.h"
@@ -23,8 +23,6 @@ static const unsigned int k_failure = 0;
 static const unsigned int k_success = 1;
 static const unsigned int k_error = 2;
 static const unsigned int k_seed_bytes = 48;
-
-enum FileType { pk, sk, ct, ss };
 
 std::string getValue(std::ifstream* const file, const std::string marker) {
     if (!file) return "";
@@ -73,21 +71,21 @@ int test(std::ifstream* const file, const std::string marker, const FileType typ
     uint8_t kat_buf[buf_size];
     readHex(value, kat_buf, buf_size);
 
-    std::string uid;
+    FileHandler file_handler;
     uint8_t parsed_buf[buf_size];
 
     switch (type) {
         case pk:
-            if (!parsePKFile(k_pk_file_default, parsed_buf, uid)) return k_error;
+            if (!file_handler.parseFile(FileType::pk, k_pk_file_default, parsed_buf)) return k_error;
             break;
         case sk:
-            if (!parseSKFile(k_sk_file_default, parsed_buf, uid)) return k_error;
+            if (!file_handler.parseFile(FileType::sk, k_sk_file_default, parsed_buf)) return k_error;
             break;
         case ct:
-            if (!parseCTFile(k_ct_file_default, parsed_buf)) return k_error;
+            if (!file_handler.parseFile(FileType::ct, k_ct_file_default, parsed_buf)) return k_error;
             break;
         case ss:
-            if (!parseKeyFile(k_key_file_default, parsed_buf)) return k_error;
+            if (!file_handler.parseFile(FileType::ss, k_key_file_default, parsed_buf)) return k_error;
             break;
         default:
             return k_error;

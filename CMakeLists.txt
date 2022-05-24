@@ -17,7 +17,8 @@ set(COMMONSOURCES
     kyber/ref/fips202.c
     kyber/ref/symmetric-shake.c
     src/base64.cpp
-    src/helpers.cpp
+    src/coder.cpp
+    src/filehandler.cpp
     src/inputparser.cpp
     src/keypair.cpp
     src/kyber.cpp

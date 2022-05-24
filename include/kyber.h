@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "coder.h"
+#include "filehandler.h"
 #include "keypair.h"
 #include "securestring.h"
 
@@ -12,6 +14,9 @@ static const std::string k_ct_file_default = "ct";
 static const std::string k_key_file_default = "key";
 
 class Kyber {
+    FileHandler file;
+    Coder coder;
+
    public:
     void generate(Keypair* const pair, const std::string uid,
                   const secure::string pass = "");

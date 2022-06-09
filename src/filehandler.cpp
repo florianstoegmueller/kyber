@@ -30,6 +30,11 @@ int FileHandler::write(const std::string path, const secure::string line,
     return 0;
 }
 
+int FileHandler::write(const std::string path, const std::string line,
+                       const bool append) {
+    return write(path, secure::string(line), append);
+}
+
 int FileHandler::read(const std::string path, secure::string text[]) {
     if (!text || path.empty()) return 0;
 

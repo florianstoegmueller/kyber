@@ -15,6 +15,8 @@ class FileHandler {
    public:
     int write(const std::string path, const secure::string line,
               const bool append = false);
+    int write(const std::string path, const std::string line,
+              const bool append = false);
     int read(const std::string path, secure::string text[]);
     int parseFile(FileType type, const std::string pk_file, uint8_t pk_out[],
                   std::string &uid = default_uid);

@@ -1,10 +1,14 @@
 #include "../include/keypair.h"
+#include "../include/instrumentor.h"
 
 #include <string>
 
 uint8_t* Keypair::encrypt() {
     if (pk_is_set) {
-        crypto_kem_enc(ct, key, pk);
+        {
+            PROFILE_SCOPE("kyber encrypt");
+            crypto_kem_enc(ct, key, pk);
+        }
         return ct;
     }
     return nullptr;
@@ -12,14 +16,20 @@ uint8_t* Keypair::encrypt() {
 
 uint8_t* Keypair::decrypt(const uint8_t ct[]) {
     if (sk_is_set && ct) {
-        crypto_kem_dec(key, ct, sk);
+        {
+            PROFILE_SCOPE("kyber decrypt");
+            crypto_kem_dec(key, ct, sk);
+        }
         return key;
     }
     return nullptr;
 }
 
 void Keypair::generate_pair() {
-    crypto_kem_keypair(pk, sk);
+    {
+        PROFILE_SCOPE("kyber generate");
+        crypto_kem_keypair(pk, sk);
+    }
     pk_is_set = true;
     sk_is_set = true;
 }

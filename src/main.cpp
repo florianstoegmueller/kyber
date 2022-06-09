@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
              !ct_file.empty())
         kyber.decrypt(&pair, sk_file, ct_file, key);
     else
-        std::cout << "No command line argument given. For help type: "
+        std::cout << "No or wrong command line arguments given. For help type: "
                   << argv[0] << " -h" << std::endl;
 
     return 0;

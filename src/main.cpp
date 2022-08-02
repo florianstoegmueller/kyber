@@ -4,7 +4,6 @@
 #include <string>
 
 #include "../include/inputparser.h"
-#include "../include/keypair.h"
 #include "../include/kyber.h"
 
 void usage(const std::string name) {
@@ -25,7 +24,6 @@ void usage(const std::string name) {
 
 int main(int argc, char* argv[]) {
     InputParser input(argc, argv);
-    Keypair pair;
     Kyber kyber;
 
     if (input.cmdOptionExists("-h") || input.cmdOptionExists("--help")) {
@@ -40,12 +38,12 @@ int main(int argc, char* argv[]) {
     const secure::string key(input.getCmdOption("-pass"));
 
     if (input.cmdOptionExists("-g") && !uid.empty())
-        kyber.generate(&pair, uid, key);
+        kyber.generate(uid, key);
     else if (input.cmdOptionExists("-e") && !pk_file.empty())
-        kyber.encrypt(&pair, pk_file);
+        kyber.encrypt(pk_file);
     else if (input.cmdOptionExists("-d") && !sk_file.empty() &&
              !ct_file.empty())
-        kyber.decrypt(&pair, sk_file, ct_file, key);
+        kyber.decrypt(sk_file, ct_file, key);
     else
         std::cout << "No or wrong command line arguments given. For help type: "
                   << argv[0] << " -h" << std::endl;

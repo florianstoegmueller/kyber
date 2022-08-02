@@ -2,7 +2,7 @@
 
 #include "../include/base64.h"
 
-secure::string Coder::encode(const uint8_t in[], const int size) {
+secure::string Base64Coder::encode(const uint8_t in[], const int size) {
     secure::string out("");
     secure::string tmp("");
     if (in) {
@@ -14,7 +14,7 @@ secure::string Coder::encode(const uint8_t in[], const int size) {
     return out;
 }
 
-int Coder::decode(secure::string in, uint8_t out[], const int size) {
+int Base64Coder::decode(secure::string in, uint8_t out[], const int size) {
     if (out && !in.empty()) {
         secure::string tmp(base64_decode(in));
         for (int i = 0; i < size; i++) {
@@ -25,6 +25,10 @@ int Coder::decode(secure::string in, uint8_t out[], const int size) {
     return 0;
 }
 
-secure::string Coder::encode(secure::string in) { return base64_encode(in); }
+secure::string Base64Coder::encode(secure::string in) {
+    return base64_encode(in);
+}
 
-secure::string Coder::decode(secure::string in) { return base64_decode(in); }
+secure::string Base64Coder::decode(secure::string in) {
+    return base64_decode(in);
+}

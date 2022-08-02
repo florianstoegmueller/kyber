@@ -9,7 +9,7 @@
 enum FileType { pk, sk, ct, ss };
 
 class FileHandler {
-    Coder coder;
+    Base64Coder coder;
     static std::string default_uid;
 
    public:

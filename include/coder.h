@@ -5,7 +5,7 @@
 
 #include "securestring.h"
 
-class Coder {
+class Base64Coder {
    public:
     secure::string encode(const uint8_t in[], const int size);
     int decode(secure::string in, uint8_t out[], const int size);

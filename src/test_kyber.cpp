@@ -6,7 +6,6 @@
 
 #include "../include/filehandler.h"
 #include "../include/inputparser.h"
-#include "../include/keypair.h"
 #include "../include/kyber.h"
 
 #ifdef __cplusplus
@@ -40,7 +39,7 @@ std::string getValue(std::ifstream* const file, const std::string marker) {
 */
 void readHex(const std::string in, uint8_t* const out, const int len) {
     if (!out) return;
-    
+
     memset(out, 0x00, len);
     for (auto ch : in) {
         if ((ch >= '0') && (ch <= '9'))
@@ -127,11 +126,10 @@ int main(int argc, char* argv[]) {
         std::cout << "testing with seed " << value << std::endl;
 
         // generate the four kyber files
-        Keypair pair;
         Kyber kyber;
-        kyber.generate(&pair, "test");
-        kyber.encrypt(&pair, k_pk_file_default);
-        kyber.decrypt(&pair, k_sk_file_default, k_ct_file_default);
+        kyber.generate("test");
+        kyber.encrypt(k_pk_file_default);
+        kyber.decrypt(k_sk_file_default, k_ct_file_default);
 
         // compare the generated kyber files with the kat file
         if (test(&kat_file, "pk = ", FileType(pk), CRYPTO_PUBLICKEYBYTES) !=

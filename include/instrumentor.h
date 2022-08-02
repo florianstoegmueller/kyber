@@ -55,7 +55,8 @@ class Instrumentor {
         result.WallTime.push_back(walltime);
         result.CpuTime.push_back(cputime);
 
-        auto ret = m_Results.insert(std::pair<std::string, ProfileResult>(name, result));
+        auto ret = m_Results.insert(
+            std::pair<std::string, ProfileResult>(name, result));
         if (!ret.second) {
             auto& tmp = ret.first->second;
             tmp.WallTime.push_back(walltime);
@@ -63,9 +64,7 @@ class Instrumentor {
         }
     }
 
-    std::map<std::string, ProfileResult> GetResults() {
-        return m_Results;
-    }
+    std::map<std::string, ProfileResult> GetResults() { return m_Results; }
 
     static Instrumentor& Get() {
         static Instrumentor instance;

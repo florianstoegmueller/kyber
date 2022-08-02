@@ -5,7 +5,8 @@
 #include <vector>
 
 class InputParser {
-    std::vector <std::string> tokens;
+    std::vector<std::string> tokens;
+
    public:
     InputParser(int argc, char *argv[]);
     bool cmdOptionExists(const std::string &option);

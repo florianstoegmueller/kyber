@@ -16,22 +16,19 @@ extern "C" {
 }
 #endif
 
-void Kyber::generate(Keypair* const pair, const std::string uid,
-                     const secure::string pass) {
-    if (!pair) return;
-
-    (*pair).generate_pair();
+void Kyber::generate(const std::string uid, const secure::string pass) {
+    pair.generate_pair();
     secure::string sk("");
     std::string sk_file = k_sk_file_default;
 
     if (pass.empty()) {
         sk += uid + "\n";
-        sk += coder.encode((*pair).get_sk(), CRYPTO_SECRETKEYBYTES);
+        sk += coder.encode(pair.get_sk(), CRYPTO_SECRETKEYBYTES);
     } else {
         AES aes;
         secure::string ctext("");
 
-        uint8_t* sk_bytes = (*pair).get_sk();
+        uint8_t* sk_bytes = pair.get_sk();
         secure::string ptext(uid + "\n");
         for (int i = 0; i < CRYPTO_SECRETKEYBYTES; i++) {
             ptext += sk_bytes[i];
@@ -42,7 +39,7 @@ void Kyber::generate(Keypair* const pair, const std::string uid,
         sk_file += ".enc";
     }
 
-    secure::string pk(coder.encode((*pair).get_pk(), CRYPTO_PUBLICKEYBYTES));
+    secure::string pk(coder.encode(pair.get_pk(), CRYPTO_PUBLICKEYBYTES));
     if (!file.write(k_pk_file_default, secure::string(uid)))
         std::cout << "Error writing uid to pk file!" << std::endl;
     if (!file.write(k_pk_file_default, pk, true))
@@ -51,9 +48,7 @@ void Kyber::generate(Keypair* const pair, const std::string uid,
         std::cout << "Error writing to sk file!" << std::endl;
 }
 
-void Kyber::encrypt(Keypair* const pair, const std::string pk_file) {
-    if (!pair) return;
-
+void Kyber::encrypt(const std::string pk_file) {
     uint8_t pk[CRYPTO_PUBLICKEYBYTES];
 
     if (!file.parseFile(FileType::pk, pk_file, pk)) {
@@ -61,9 +56,9 @@ void Kyber::encrypt(Keypair* const pair, const std::string pk_file) {
         return;
     }
 
-    (*pair).set_pk(pk);
-    uint8_t* ct = (*pair).encrypt();
-    uint8_t* key = (*pair).get_key();
+    pair.set_pk(pk);
+    uint8_t* ct = pair.encrypt();
+    uint8_t* key = pair.get_key();
     secure::string ct_encoded(coder.encode(ct, CRYPTO_CIPHERTEXTBYTES));
     secure::string key_encoded(coder.encode(key, CRYPTO_BYTES));
 
@@ -78,10 +73,8 @@ void Kyber::encrypt(Keypair* const pair, const std::string pk_file) {
     memset(key, 0x00, CRYPTO_BYTES);
 }
 
-void Kyber::decrypt(Keypair* const pair, const std::string sk_file,
-                    const std::string ct_file, const secure::string pass) {
-    if (!pair) return;
-
+void Kyber::decrypt(const std::string sk_file, const std::string ct_file,
+                    const secure::string pass) {
     uint8_t* key;
     uint8_t sk[CRYPTO_SECRETKEYBYTES];
     uint8_t ct[CRYPTO_CIPHERTEXTBYTES];
@@ -97,8 +90,8 @@ void Kyber::decrypt(Keypair* const pair, const std::string sk_file,
         return;
     }
 
-    (*pair).set_sk(sk);
-    key = (*pair).decrypt(ct);
+    pair.set_sk(sk);
+    key = pair.decrypt(ct);
 
     std::cout << coder.encode(key, CRYPTO_BYTES) << std::endl;
 

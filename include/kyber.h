@@ -13,14 +13,14 @@ static const std::string k_key_file_default = "key";
 
 class Kyber {
     FileHandler file;
-    Coder coder;
+    Base64Coder coder;
+    Keypair pair;
 
    public:
-    void generate(Keypair* const pair, const std::string uid,
-                  const secure::string pass = "");
-    void encrypt(Keypair* const pair, const std::string pk_file);
-    void decrypt(Keypair* const pair, const std::string sk_file,
-                 const std::string ct_file, const secure::string pass = "");
+    void generate(const std::string uid, const secure::string pass = "");
+    void encrypt(const std::string pk_file);
+    void decrypt(const std::string sk_file, const std::string ct_file,
+                 const secure::string pass = "");
 };
 
 #endif

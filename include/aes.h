@@ -2,6 +2,7 @@
 #define AES_H
 
 #include <openssl/evp.h>
+
 #include <string>
 
 #include "securestring.h"

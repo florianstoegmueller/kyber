@@ -1,7 +1,8 @@
 #include "../include/keypair.h"
-#include "../include/instrumentor.h"
 
 #include <string>
+
+#include "../include/instrumentor.h"
 
 uint8_t* Keypair::encrypt() {
     if (pk_is_set) {
